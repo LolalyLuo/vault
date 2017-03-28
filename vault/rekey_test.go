@@ -102,7 +102,7 @@ func TestCore_Rekey_Init(t *testing.T) {
 	testCore_Rekey_Init_Common(t, c, false)
 
 	bc, rc := TestSealDefConfigs()
-	c, _, _, _ = TestCoreUnsealedWithConfigs(t, bc, rc)
+	c, _, _, _, _ = TestCoreUnsealedWithConfigs(t, bc, rc)
 	testCore_Rekey_Init_Common(t, c, false)
 	testCore_Rekey_Init_Common(t, c, true)
 }
@@ -145,7 +145,7 @@ func TestCore_Rekey_Update(t *testing.T) {
 
 	bc, rc = TestSealDefConfigs()
 	bc.StoredShares = 0
-	c, masterKeys, recoveryKeys, root := TestCoreUnsealedWithConfigs(t, bc, rc)
+	c, masterKeys, recoveryKeys, root, _ := TestCoreUnsealedWithConfigs(t, bc, rc)
 	testCore_Rekey_Update_Common(t, c, masterKeys, root, false)
 	testCore_Rekey_Update_Common(t, c, recoveryKeys, root, true)
 }
@@ -324,9 +324,10 @@ func TestCore_Rekey_Invalid(t *testing.T) {
 	bc.StoredShares = 0
 	bc.SecretShares = 1
 	bc.SecretThreshold = 1
+	bc.SecretSharesIdentifierNames = "one"
 	rc.SecretShares = 1
 	rc.SecretThreshold = 1
-	c, masterKeys, recoveryKeys, _ := TestCoreUnsealedWithConfigs(t, bc, rc)
+	c, masterKeys, recoveryKeys, _, _ := TestCoreUnsealedWithConfigs(t, bc, rc)
 	testCore_Rekey_Invalid_Common(t, c, masterKeys, false)
 	testCore_Rekey_Invalid_Common(t, c, recoveryKeys, true)
 }

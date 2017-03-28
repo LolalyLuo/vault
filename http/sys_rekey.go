@@ -133,6 +133,7 @@ func handleSysRekeyInitPut(core *vault.Core, recovery bool, w http.ResponseWrite
 		StoredShares:    req.StoredShares,
 		PGPKeys:         req.PGPKeys,
 		Backup:          req.Backup,
+		SecretSharesIdentifierNames: req.KeySharesIdentifierNames,
 	}, recovery)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err)
@@ -220,11 +221,12 @@ func handleSysRekeyUpdate(core *vault.Core, recovery bool) http.Handler {
 }
 
 type RekeyRequest struct {
-	SecretShares    int      `json:"secret_shares"`
-	SecretThreshold int      `json:"secret_threshold"`
-	StoredShares    int      `json:"stored_shares"`
-	PGPKeys         []string `json:"pgp_keys"`
-	Backup          bool     `json:"backup"`
+	SecretShares             int      `json:"secret_shares"`
+	SecretThreshold          int      `json:"secret_threshold"`
+	StoredShares             int      `json:"stored_shares"`
+	PGPKeys                  []string `json:"pgp_keys"`
+	Backup                   bool     `json:"backup"`
+	KeySharesIdentifierNames string   `json:"key_shares_identifier_names"`
 }
 
 type RekeyStatusResponse struct {
@@ -244,10 +246,11 @@ type RekeyUpdateRequest struct {
 }
 
 type RekeyUpdateResponse struct {
-	Nonce           string   `json:"nonce"`
-	Complete        bool     `json:"complete"`
-	Keys            []string `json:"keys"`
-	KeysB64         []string `json:"keys_base64"`
-	PGPFingerprints []string `json:"pgp_fingerprints"`
-	Backup          bool     `json:"backup"`
+	Nonce                string              `json:"nonce"`
+	Complete             bool                `json:"complete"`
+	Keys                 []string            `json:"keys"`
+	KeysB64              []string            `json:"keys_base64"`
+	PGPFingerprints      []string            `json:"pgp_fingerprints"`
+	Backup               bool                `json:"backup"`
+	SecretSharesMetadata []*KeyShareMetadata `json:"secret_shares_metadata"`
 }

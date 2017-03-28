@@ -88,7 +88,7 @@ func TestCore_GenerateRoot_Init(t *testing.T) {
 	testCore_GenerateRoot_Init_Common(t, c)
 
 	bc, rc := TestSealDefConfigs()
-	c, _, _, _ = TestCoreUnsealedWithConfigs(t, bc, rc)
+	c, _, _, _, _ = TestCoreUnsealedWithConfigs(t, bc, rc)
 	testCore_GenerateRoot_Init_Common(t, c)
 }
 
