@@ -85,7 +85,8 @@ func (c *UnsealCommand) Run(args []string) int {
 			"Key Shares: %d\n"+
 			"Key Threshold: %d\n"+
 			"Unseal Progress: %d\n"+
-			"Unseal Nonce: %v",
+			"Unseal Nonce: %v"+
+			"Lolaly~~~~~",
 		sealStatus.Sealed,
 		sealStatus.N,
 		sealStatus.T,

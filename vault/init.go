@@ -145,6 +145,7 @@ func (c *Core) Initialize(initParams *InitParams) (*InitResult, error) {
 		return nil, fmt.Errorf("failed to initialize barrier: %v", err)
 	}
 	if c.logger.IsInfo() {
+		c.logger.Info("Lolaly said we are initializing here!!!~~~")
 		c.logger.Info("core: security barrier initialized", "shares", barrierConfig.SecretShares, "threshold", barrierConfig.SecretThreshold)
 	}
 
