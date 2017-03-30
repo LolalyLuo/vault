@@ -19,9 +19,10 @@ type UnsealCommand struct {
 }
 
 func (c *UnsealCommand) Run(args []string) int {
-	var reset bool
+	var reset, rawText bool
 	flags := c.Meta.FlagSet("unseal", meta.FlagSetDefault)
 	flags.BoolVar(&reset, "reset", false, "")
+	flags.BoolVar(&rawText, "rawText", false, "")
 	flags.Usage = func() { c.Ui.Error(c.Help()) }
 	if err := flags.Parse(args); err != nil {
 		return 1
@@ -71,7 +72,7 @@ func (c *UnsealCommand) Run(args []string) int {
 				return 1
 			}
 		}
-		sealStatus, err = client.Sys().Unseal(strings.TrimSpace(value))
+		sealStatus, err = client.Sys().Unseal(strings.TrimSpace(value), rawText)
 	}
 
 	if err != nil {
@@ -86,7 +87,6 @@ func (c *UnsealCommand) Run(args []string) int {
 			"Key Threshold: %d\n"+
 			"Unseal Progress: %d\n"+
 			"Unseal Nonce: %v"+
-			"Lolaly~~~~~",
 		sealStatus.Sealed,
 		sealStatus.N,
 		sealStatus.T,
@@ -123,6 +123,9 @@ Unseal Options:
 
   -reset                  Reset the unsealing process by throwing away
                           prior keys in process to unseal the vault.
+
+  -rawtext				  The key is not encoded in either hex or base64 (i.e.,
+                          it's a password)
 
 `
 	return strings.TrimSpace(helpText)

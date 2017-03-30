@@ -241,6 +241,9 @@ type SealConfig struct {
 
 	// How many keys to store, for seals that support storage.
 	StoredShares int `json:"stored_shares"`
+
+    // TODO: sensible comment here
+    PolyhashEntries []string `json:"polyhash"`
 }
 
 // Validate is used to sanity check the seal configuration
