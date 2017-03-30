@@ -1,0 +1,7 @@
+GET /v1/sys/seal-status HTTP/1.1
+Host: 127.0.0.1:8200
+User-Agent: Go-http-client/1.1
+X-Vault-Token: 6a01d00d-3c44-d72e-4f03-a935aa9663b5
+Accept-Encoding: gzip
+Connection: close
+

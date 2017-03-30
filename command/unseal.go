@@ -22,7 +22,7 @@ func (c *UnsealCommand) Run(args []string) int {
 	var reset, rawText bool
 	flags := c.Meta.FlagSet("unseal", meta.FlagSetDefault)
 	flags.BoolVar(&reset, "reset", false, "")
-	flags.BoolVar(&rawText, "rawText", false, "")
+	flags.BoolVar(&rawText, "rawtext", false, "")
 	flags.Usage = func() { c.Ui.Error(c.Help()) }
 	if err := flags.Parse(args); err != nil {
 		return 1
@@ -86,7 +86,7 @@ func (c *UnsealCommand) Run(args []string) int {
 			"Key Shares: %d\n"+
 			"Key Threshold: %d\n"+
 			"Unseal Progress: %d\n"+
-			"Unseal Nonce: %v"+
+			"Unseal Nonce: %v",
 		sealStatus.Sealed,
 		sealStatus.N,
 		sealStatus.T,

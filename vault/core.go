@@ -14,7 +14,7 @@ import (
 	"time"
 
 	"github.com/armon/go-metrics"
-	log "github.com/mgutz/logxi/v1"
+	"github.com/mgutz/logxi/v1"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -30,6 +30,7 @@ import (
 	"github.com/hashicorp/vault/helper/mlock"
 	"github.com/hashicorp/vault/logical"
 	"github.com/hashicorp/vault/physical"
+	"github.com/hashicorp/vault/polyhash"
 	"github.com/hashicorp/vault/shamir"
 )
 
@@ -831,6 +832,14 @@ func (c *Core) Unseal(key []byte) (bool, error) {
 	// Check if already unsealed
 	if !c.sealed {
 		return true, nil
+	}
+
+	if config.PolyhashEntries != nil {
+		var shareno int
+		var password string
+		output := string(key)
+		fmt.Sscanf(output, "%d,%s", &shareno, &password)
+		key = polyhash.RecoverShareFromPolyhash(shareno, config.PolyhashEntries, password)
 	}
 
 	masterKey, err := c.unsealPart(config, key)
