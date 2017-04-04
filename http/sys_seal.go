@@ -107,9 +107,9 @@ func handleSysUnseal(core *vault.Core) http.Handler {
 			var key []byte
 			var err error
 			// Decode the key, which is base64 or hex encoded
-			// TODO: Some sanity checks are in order, rawText would only make sense in the
+			// TODO: Some sanity checks are in order, polyhash would only make sense in the
 			// context of a polyhashing store
-			if !req.rawText {
+			if !req.Polyhash {
 				min, max := core.BarrierKeyLength()
 				key, err = hex.DecodeString(req.Key)
 
@@ -223,7 +223,7 @@ type SealStatusResponse struct {
 }
 
 type UnsealRequest struct {
-	Key     string
-	rawText bool
-	Reset   bool
+	Key      string
+	Polyhash bool
+	Reset    bool
 }

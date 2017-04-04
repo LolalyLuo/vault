@@ -242,8 +242,8 @@ type SealConfig struct {
 	// How many keys to store, for seals that support storage.
 	StoredShares int `json:"stored_shares"`
 
-    // TODO: sensible comment here
-    PolyhashEntries []string `json:"polyhash"`
+	// TODO: sensible comment here
+	PolyhashEntries []string `json:"polyhash"`
 }
 
 // Validate is used to sanity check the seal configuration
@@ -295,6 +295,7 @@ func (s *SealConfig) Clone() *SealConfig {
 		Nonce:           s.Nonce,
 		Backup:          s.Backup,
 		StoredShares:    s.StoredShares,
+		PolyhashEntries: s.PolyhashEntries,
 	}
 	if len(s.PGPKeys) > 0 {
 		ret.PGPKeys = make([]string, len(s.PGPKeys))

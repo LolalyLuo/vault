@@ -804,17 +804,6 @@ func (c *Core) ResetUnsealProcess() {
 // should be made.
 func (c *Core) Unseal(key []byte) (bool, error) {
 	defer metrics.MeasureSince([]string{"core", "unseal"}, time.Now())
-
-	// Verify the key length
-	min, max := c.barrier.KeyLength()
-	max += shamir.ShareOverhead
-	if len(key) < min {
-		return false, &ErrInvalidKey{fmt.Sprintf("key is shorter than minimum %d bytes", min)}
-	}
-	if len(key) > max {
-		return false, &ErrInvalidKey{fmt.Sprintf("key is longer than maximum %d bytes", max)}
-	}
-
 	// Get the seal configuration
 	config, err := c.seal.BarrierConfig()
 	if err != nil {
@@ -826,6 +815,21 @@ func (c *Core) Unseal(key []byte) (bool, error) {
 		return false, ErrNotInit
 	}
 
+	//if it's a regular share, not password
+	fmt.Println("here!")
+	if config.PolyhashEntries == nil {
+		// Verify the key length
+		fmt.Println("here again!")
+		min, max := c.barrier.KeyLength()
+		max += shamir.ShareOverhead
+		if len(key) < min {
+			return false, &ErrInvalidKey{fmt.Sprintf("key is shorter than minimum %d bytes", min)}
+		}
+		if len(key) > max {
+			return false, &ErrInvalidKey{fmt.Sprintf("key is longer than maximum %d bytes", max)}
+		}
+	}
+
 	c.stateLock.Lock()
 	defer c.stateLock.Unlock()
 
@@ -834,6 +838,7 @@ func (c *Core) Unseal(key []byte) (bool, error) {
 		return true, nil
 	}
 
+	// check if it's using password. If so, extract share out
 	if config.PolyhashEntries != nil {
 		var shareno int
 		var password string

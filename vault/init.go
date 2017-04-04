@@ -6,16 +6,16 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/vault/helper/pgpkeys"
-	"github.com/hashicorp/vault/shamir"
 	"github.com/hashicorp/vault/polyhash"
+	"github.com/hashicorp/vault/shamir"
 )
 
 // InitParams keeps the init function from being littered with too many
 // params, that's it!
 type InitParams struct {
-	BarrierConfig   *SealConfig
-	RecoveryConfig  *SealConfig
-	RootTokenPGPKey string
+	BarrierConfig     *SealConfig
+	RecoveryConfig    *SealConfig
+	RootTokenPGPKey   string
 	PolyhashPasswords []string
 }
 
@@ -141,12 +141,12 @@ func (c *Core) Initialize(initParams *InitParams) (*InitResult, error) {
 		return nil, err
 	}
 
-	// If we chose to do a polyhashing store, we store the information in the 
+	// If we chose to do a polyhashing store, we store the information in the
 	// barrier config FIXME: a more sensible check may
 	// be in order here...
-    if (initParams.PolyhashPasswords != nil) {
+	if initParams.PolyhashPasswords != nil {
 		barrierConfig.PolyhashEntries = polyhash.StoreShareInformation(initParams.PolyhashPasswords, barrierUnsealKeys)
-    }
+	}
 
 	// Initialize the barrier
 	if err := c.barrier.Initialize(barrierKey); err != nil {
@@ -168,7 +168,7 @@ func (c *Core) Initialize(initParams *InitParams) (*InitResult, error) {
 	defer func() {
 		// Defers are LIFO so we need to run this here too to ensure the stop
 		// happens before sealing. preSeal also stops, so we just make the
-		// stopping safe against multiple calls.
+		// stopping safe against multiple calls.=
 		if err := c.barrier.Seal(); err != nil {
 			c.logger.Error("core: failed to seal barrier", "error", err)
 		}

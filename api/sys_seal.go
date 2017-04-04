@@ -25,8 +25,8 @@ func (c *Sys) ResetUnsealProcess() (*SealStatusResponse, error) {
 	return sealStatusRequest(c, r)
 }
 
-func (c *Sys) Unseal(shard string, rawText bool) (*SealStatusResponse, error) {
-	body := map[string]interface{}{"key": shard, "rawText": rawText}
+func (c *Sys) Unseal(shard string, polyhash bool) (*SealStatusResponse, error) {
+	body := map[string]interface{}{"key": shard, "polyhash": polyhash}
 
 	r := c.c.NewRequest("PUT", "/v1/sys/unseal")
 	if err := r.SetJSONBody(body); err != nil {
@@ -50,6 +50,7 @@ func sealStatusRequest(c *Sys, r *Request) (*SealStatusResponse, error) {
 
 type SealStatusResponse struct {
 	Sealed      bool   `json:"sealed"`
+	Polyhash    bool   `json:"polyhash"`
 	T           int    `json:"t"`
 	N           int    `json:"n"`
 	Progress    int    `json:"progress"`
