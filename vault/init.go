@@ -7,6 +7,7 @@ import (
 
 	"github.com/hashicorp/vault/helper/pgpkeys"
 	"github.com/hashicorp/vault/shamir"
+	"github.com/hashicorp/vault/polyhash"
 )
 
 // InitParams keeps the init function from being littered with too many
@@ -15,6 +16,7 @@ type InitParams struct {
 	BarrierConfig   *SealConfig
 	RecoveryConfig  *SealConfig
 	RootTokenPGPKey string
+	PolyhashPasswords []string
 }
 
 // InitResult is used to provide the key parts back after
@@ -139,12 +141,20 @@ func (c *Core) Initialize(initParams *InitParams) (*InitResult, error) {
 		return nil, err
 	}
 
+	// If we chose to do a polyhashing store, we store the information in the 
+	// barrier config FIXME: a more sensible check may
+	// be in order here...
+    if (initParams.PolyhashPasswords != nil) {
+		barrierConfig.PolyhashEntries = polyhash.StoreShareInformation(initParams.PolyhashPasswords, barrierUnsealKeys)
+    }
+
 	// Initialize the barrier
 	if err := c.barrier.Initialize(barrierKey); err != nil {
 		c.logger.Error("core: failed to initialize barrier", "error", err)
 		return nil, fmt.Errorf("failed to initialize barrier: %v", err)
 	}
 	if c.logger.IsInfo() {
+		c.logger.Info("Lolaly said we are initializing here!!!~~~")
 		c.logger.Info("core: security barrier initialized", "shares", barrierConfig.SecretShares, "threshold", barrierConfig.SecretThreshold)
 	}
 

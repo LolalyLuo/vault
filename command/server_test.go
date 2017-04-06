@@ -23,7 +23,7 @@ var (
 disable_mlock = true
 
 listener "tcp" {
-  address = "127.0.0.1:8200"
+  address = "127.0.0.1:8201"
   tls_disable = "true"
 }
 `
@@ -31,14 +31,14 @@ listener "tcp" {
 	consulhcl = `
 backend "consul" {
     prefix = "foo/"
-    advertise_addr = "http://127.0.0.1:8200"
+    advertise_addr = "http://127.0.0.1:8201"
     disable_registration = "true"
 }
 `
 	haconsulhcl = `
 ha_backend "consul" {
     prefix = "bar/"
-    redirect_addr = "http://127.0.0.1:8200"
+    redirect_addr = "http://127.0.0.1:8201"
     disable_registration = "true"
 }
 `

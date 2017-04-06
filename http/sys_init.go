@@ -38,6 +38,7 @@ func handleSysInitGet(core *vault.Core, w http.ResponseWriter, r *http.Request) 
 func handleSysInitPut(core *vault.Core, w http.ResponseWriter, r *http.Request) {
 	// Parse the request
 	var req InitRequest
+
 	if err := parseRequest(r, w, &req); err != nil {
 		respondError(w, http.StatusBadRequest, err)
 		return
@@ -97,6 +98,7 @@ func handleSysInitPut(core *vault.Core, w http.ResponseWriter, r *http.Request) 
 		BarrierConfig:   barrierConfig,
 		RecoveryConfig:  recoveryConfig,
 		RootTokenPGPKey: req.RootTokenPGPKey,
+		PolyhashPasswords: req.PolyhashPasswords,
 	}
 
 	result, initErr := core.Initialize(initParams)
@@ -147,6 +149,7 @@ type InitRequest struct {
 	RecoveryThreshold int      `json:"recovery_threshold"`
 	RecoveryPGPKeys   []string `json:"recovery_pgp_keys"`
 	RootTokenPGPKey   string   `json:"root_token_pgp_key"`
+    PolyhashPasswords []string   `json:"polyhash"`
 }
 
 type InitResponse struct {
